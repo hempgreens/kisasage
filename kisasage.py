@@ -61,6 +61,8 @@ class Operator():
       '@l': self.len_ary_oper,
       '&*': self.get_ptr_oper,
       '&>': self.set_ptr_oper,
+      '&@': None,               # def_global_scode_array(ary_length -- g_ary_ptr)
+      '&-': None,               # free_ptr(ptr --)
 
       '\\time': self.time_oper,
       '\\depth': self.stack_depth_oper,
