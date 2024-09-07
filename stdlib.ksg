@@ -1,0 +1,90 @@
+### DO $ i $ do_loop_lim {
+### LOOP i 1 + $= i i do_loop_lim < }
+
+: depth \depth ;
+: drop depth ( $ d ) ;
+: dup depth ( $ v v v ) ;
+: swap depth 2 >= ( $ t1 $ t2 t1 t2 ) ;
+: over depth 2 >= ( $ t1 $ t2 t2 t1 t2 ) ;
+: clear depth ( { drop depth } ) ;
+
+: abs $ v v 0 < ( v -1 * [ ) v ] ;
+
+: chr $ i ' ' $ a i 0 @s a a ;
+: ord $ s 0 @g s ;
+
+/** Generate Random Number a b -- r
+ * @param {VALUE}   a   under limit
+ * @param {VALUE}   b   top limit
+ * @return {VALUE}  r   a <= random_number <= b
+ */
+: rand $ b $ a
+  -1 $ ret
+  a b >= ( [ )
+  0b1111100 \time $ s $ x $ y $ z $ w
+  0 $ t
+  {
+    x 11 << x ^ $ t
+    y $ x z $ y w $ z
+    w 19 >> w ^ t 8 >> t ^ ^ $ w
+    w b a - 1 + % a + $ ret
+    s 1 - $ s s
+  }        ]
+  ret
+;
+
+/** Show Array Elements ary_ptr --
+ * @param {VALUE}   ary_ptr arrya pointer
+ */
+: show_array $ ary_ptr
+  ary_ptr &> ary
+  0 $ idx
+  @l ary $ len
+  len "\n(\%)["
+  {
+    idx idx @g ary "\%"
+    idx 1 + $= idx
+    idx len >= (  [ )
+    ", " 1
+  }
+                  ]
+  "]\n"
+;
+
+/** for_each (ary_ptr rt_ptr --)
+ * @param {VALUE}   rt_ptr  routine (elem idx ary_ptr -- )
+ * @param {VALUE}   ary_ptr src array pointer
+ */
+: for_each $ rt_ptr $ ary_ptr
+  : stop len $= idx ;
+  rt_ptr &> rt
+  ary_ptr &> ary
+  0 $ idx
+  @l ary $ len
+  {
+    ary_ptr idx idx @g ary rt
+    idx 1 + $= idx
+    idx len <
+  }
+;
+
+/** range (start stop step -- v1 v2 ... len)
+ * @param {VALUE}   start start number
+ * @param {VALUE}   stop stop number
+ * @param {VALUE}   step step number(Can not be 0)
+ */
+: range $ step $ stop $ start
+  0 $ r
+  0 $ i
+  0 $ len
+  step 0 == ( "ValueError step must not be zero"  [ )
+  {
+    start step i * + $= r
+    step 0 > ( r stop >=  [ ) r stop <= ] ( [ )
+    r
+    len 1 + $= len
+    i 1 + $= i
+    1
+  }                                         ]     ]
+  len
+;

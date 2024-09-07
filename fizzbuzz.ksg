@@ -1,0 +1,9 @@
+##<stdlib.ksg>
+      
+10 40 rand dup "rand=\%\n"
+1 #DO
+  i 15 % ! ( "FizzBuzz\n" [ )
+  i 3 % ! ( "Fizz\n"    [  )
+  i 5 % ! ( "Buzz\n"  [ )
+  i "\%\n"            ] ] ]
+#LOOP
